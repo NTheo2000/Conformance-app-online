@@ -23,7 +23,7 @@ from pm4py.objects.log.importer.xes import importer as xes_importer
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://conformance-app-online.vercel.app"])
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
