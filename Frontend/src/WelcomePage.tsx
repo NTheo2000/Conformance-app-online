@@ -12,6 +12,7 @@ const WelcomePage: React.FC = () => {
   const [xesFile, setXesFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadComplete, setUploadComplete] = useState(false);
+  const BACKEND_URL = 'https://conformance-app-online.onrender.com';
 
   const navigate = useNavigate();
   const {
@@ -67,19 +68,24 @@ const WelcomePage: React.FC = () => {
     formData.append('xes', xesFile);
 
     try {
-      const uploadResponse = await fetch('http://127.0.0.1:5000/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      const uploadResponse = await fetch(`${BACKEND_URL}/upload`, {
+  method: 'POST',
+  body: formData,
+});
+
       const uploadData = await uploadResponse.json();
       console.log('Upload Response:', uploadData);
 
-      const sequenceResponse = await fetch('http://127.0.0.1:5000/api/unique-sequences');
+  
+      const sequenceResponse = await fetch(`${BACKEND_URL}/api/unique-sequences`);
+
       const sequenceJson: UniqueSequenceBin[] = await sequenceResponse.json();
       setUniqueSequences(sequenceJson);
       console.log('Unique Sequences per Bin:', sequenceJson);
 
-    const traceSeqResponse = await fetch('http://127.0.0.1:5000/api/trace-sequences');
+    
+    const traceSeqResponse = await fetch(`${BACKEND_URL}/api/trace-sequences`);
+
     const traceSeqJson = await traceSeqResponse.json();
     setTraceSequences(traceSeqJson);
     console.log('Trace Sequences:', traceSeqJson);
@@ -87,17 +93,23 @@ const WelcomePage: React.FC = () => {
 
 
 
-      const fitnessResponse = await fetch('http://127.0.0.1:5000/api/fitness');
+      
+      const fitnessResponse = await fetch(`${BACKEND_URL}/api/fitness`);
+
       const fitnessJson = await fitnessResponse.json();
       setFitnessData(fitnessJson);
       console.log('Fitness Data:', fitnessJson);
 
-      const binResponse = await fetch('http://127.0.0.1:5000/api/conformance-bins');
+      
+      const binResponse = await fetch(`${BACKEND_URL}/api/conformance-bins`);
+
       const binJson = await binResponse.json();
       setConformanceBins(binJson);
       console.log('Conformance Bins:', binJson);
 
-      const deviationResponse = await fetch('http://127.0.0.1:5000/api/activity-deviations');
+      
+      const deviationResponse = await fetch(`${BACKEND_URL}/api/activity-deviations`);
+
       const deviationJson = await deviationResponse.json();
       setActivityDeviations({
         deviations: deviationJson.deviations,
@@ -106,23 +118,31 @@ const WelcomePage: React.FC = () => {
       
       console.log('Activity Deviations:', deviationJson);
 
-      const outcomeResponse = await fetch('http://127.0.0.1:5000/api/outcome-distribution');
+      
+      const outcomeResponse = await fetch(`${BACKEND_URL}/api/outcome-distribution`);
+
       const outcomeJson = await outcomeResponse.json();
       setOutcomeBins(outcomeJson.bins);
       setDesiredOutcomes(outcomeJson.desiredOutcomes);
       console.log('Outcome Distribution:', outcomeJson);
 
-      const roleResponse = await fetch('http://127.0.0.1:5000/api/conformance-by-role');
+      
+      const roleResponse = await fetch(`${BACKEND_URL}/api/conformance-by-role`);
+
       const roleJson = await roleResponse.json();
       setRoleConformance(roleJson);
       console.log('Role-Based Conformance:', roleJson);
 
-      const resourceResponse = await fetch('http://127.0.0.1:5000/api/conformance-by-resource');
+      
+      const resourceResponse = await fetch(`${BACKEND_URL}/api/conformance-by-resource`);
+
 const resourceJson = await resourceResponse.json();
 setResourceConformance(resourceJson);
 console.log('Resource-Based Conformance:', resourceJson);
 
-      const amountResponse = await fetch('http://127.0.0.1:5000/api/requested-amounts');
+      
+      const amountResponse = await fetch(`${BACKEND_URL}/api/requested-amounts`);
+
 const amountJson = await amountResponse.json();
 setAmountConformanceData(amountJson);
 console.log('Requested Amount vs Conformance:', amountJson);
@@ -138,8 +158,9 @@ console.log('Requested Amount vs Conformance:', amountJson);
   };
   const handlePreloadDataset = async () => {
   try {
-    const bpmnResponse = await fetch('http://127.0.0.1:5000/preload/default.bpmn');
-    const xesResponse = await fetch('http://127.0.0.1:5000/preload/default.xes');
+    
+    const bpmnResponse = await fetch(`${BACKEND_URL}/preload/default.bpmn`);
+    const xesResponse = await fetch(`${BACKEND_URL}/preload/default.xes`);
 
     if (!bpmnResponse.ok || !xesResponse.ok) {
       throw new Error('Failed to fetch default files');
